@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   odoo:
-    image: odoo:17.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: odoo17
     depends_on:
       - db
