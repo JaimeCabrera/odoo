@@ -75,8 +75,7 @@
                     <tipoRegi t-if="identification == '02'" t-out="taxsupport['regime_type']"/>
                     <paisEfecPago t-if="identification == '02'" t-out="taxsupport['paying_country']"/>
                     <aplicConvDobTrib t-if="identification == '02'" t-out="taxsupport['double_taxation']"/>
-                    <pagExtSujRetNorLeg t-if="identification == '02' and taxsupport['double_taxation'] == 'NO'"
-                                        t-out="taxsupport['subject_withhold']"/>
+                    <pagExtSujRetNorLeg t-if="identification == '02' and taxsupport['double_taxation'] == 'NO'" t-out="taxsupport['subject_withhold']"/>
                     <pagoRegFis t-if="identification == '02'" t-out="taxsupport['fiscal_payment']"/>
                     <totalSinImpuestos t-out="format_num_2(taxsupport['invoice_amount_untaxed'])"/>
                     <importeTotal t-out="format_num_2(taxsupport['invoice_amount_total'])"/>
@@ -136,11 +135,9 @@
             <!-- All docs -->
             <fechaEmision t-out="strftime(move.invoice_date or move.l10n_ec_withhold_date)"/>
             <dirEstablecimiento t-out="address"/>
-            <contribuyenteEspecial t-out="company.l10n_ec_special_taxpayer_number"
-                                   t-if="not is_cnote and not is_dnote"/>
+            <contribuyenteEspecial t-out="company.l10n_ec_special_taxpayer_number" t-if="not is_cnote and not is_dnote"/>
 
-            <obligadoContabilidad t-if="is_invoice or is_liquidation"
-                                  t-out="'SI' if company.l10n_ec_forced_accounting else 'NO'"/>
+            <obligadoContabilidad t-if="is_invoice or is_liquidation" t-out="'SI' if company.l10n_ec_forced_accounting else 'NO'"/>
 
             <!-- Invoice-related docs -->
             <tipoIdentificacionComprador t-if="is_cnote or is_dnote or is_invoice" t-out="partner_sri_code"/>
@@ -156,8 +153,7 @@
 
             <!-- Credit and debit notes -->
             <contribuyenteEspecial t-if="is_cnote or is_dnote" t-out="company.l10n_ec_special_taxpayer_number"/>
-            <obligadoContabilidad t-if="is_cnote or is_dnote"
-                                  t-out="'SI' if company.l10n_ec_forced_accounting else 'NO'"/>
+            <obligadoContabilidad t-if="is_cnote or is_dnote" t-out="'SI' if company.l10n_ec_forced_accounting else 'NO'"/>
             <codDocModificado t-if="is_cnote or is_dnote" t-out="'01'"/>
             <numDocModificado t-if="is_cnote or is_dnote" t-out="modified_doc.l10n_latam_document_number"/>
             <fechaEmisionDocSustento t-if="is_cnote or is_dnote" t-out="strftime(modified_doc.invoice_date)"/>
@@ -201,10 +197,8 @@
 
             <!-- Withholds only -->
             <tipoIdentificacionSujetoRetenido t-out="partner_sri_code"/>
-            <t t-set="supplier_identification_code"
-               t-value="move.partner_id._get_l10n_ec_edi_supplier_identification_type_code()"/>
-            <tipoSujetoRetenido t-if="partner_sri_code == '08' and supplier_identification_code"
-                                t-out="supplier_identification_code"/><!-- foreign supplier partners -->
+            <t t-set="supplier_identification_code" t-value="move.partner_id._get_l10n_ec_edi_supplier_identification_type_code()"/>
+            <tipoSujetoRetenido t-if="partner_sri_code == '08' and supplier_identification_code" t-out="supplier_identification_code"/><!-- foreign supplier partners -->
             <parteRel t-out="'SI' if move.partner_id.l10n_ec_related_party else 'NO'"/>
             <razonSocialSujetoRetenido t-out="clean_str(partner.name)"/>
             <identificacionSujetoRetenido t-out="partner.vat"/>
@@ -218,8 +212,7 @@
                     <t t-set="line" t-value="line_items[0]"/>
                     <t t-set="line_tax_details" t-value="line_items[1]['tax_details']"/>
                     <t t-set="product" t-value="line.product_id"/>
-                    <t t-set="product_code"
-                       t-value="product and (product.barcode or product.default_code or 'N/A')[:25]"/>
+                    <t t-set="product_code" t-value="product and (product.barcode or product.default_code or 'N/A')[:25]"/>
                     <t t-set="line_edi_values" t-value="line._l10n_ec_prepare_edi_vals_to_export_USD()"/>
                     <codigoInterno t-if="is_cnote" t-out="product_code"/>
                     <codigoPrincipal t-if="is_invoice or is_liquidation" t-out="product_code"/>
@@ -274,55 +267,11 @@
         <template id="common_additional_info_template">
             <infoAdicional t-if="additional_info">
                 <campoAdicional
-                        t-foreach="additional_info.items()"
-                        t-as="additional_item"
-                        t-att-nombre="additional_item[0]"
-                        t-out="clean_str(additional_item[1])"/>
+                    t-foreach="additional_info.items()"
+                    t-as="additional_item"
+                    t-att-nombre="additional_item[0]"
+                    t-out="clean_str(additional_item[1])"/>
             </infoAdicional>
-        </template>
-
-        <template id="guia_remision_template">
-            <guiaRemision id="guia_remision_template" version="1.1.0">
-                <infoTributaria>
-                    <ambiente t-esc="company.l10n_ec_production_env and '2' or '1'"/>
-                    <tipoEmision>1</tipoEmision>
-                    <razonSocial t-esc="company.l10n_ec_legal_name"/>
-                    <ruc t-esc="company.vat"/>
-                    <claveAcceso t-esc="clave_acceso"/>
-                    <codDoc>06</codDoc>
-                    <estab t-esc="company.l10n_ec_establishment_code"/>
-                    <ptoEmi t-esc="company.l10n_ec_emission_point_code"/>
-                    <secuencial t-esc="secuencial"/>
-                    <dirMatriz t-esc="company.street"/>
-                </infoTributaria>
-
-                <infoGuiaRemision>
-                    <dirEstablecimiento t-esc="direccion_partida"/>
-                    <dirPartida t-esc="direccion_partida"/>
-                    <razonSocialTransportista t-esc="transportista_id.name"/>
-                    <tipoIdentificacionTransportista t-esc="transportista_id.l10n_ec_identification_type_id.code"/>
-                    <rucTransportista t-esc="transportista_id.vat"/>
-                    <fechaIniTransporte t-esc="fecha_inicio_transporte"/>
-                    <fechaFinTransporte t-esc="fecha_fin_transporte"/>
-                    <placa t-esc="vehiculo_transportista_id.license_plate"/>
-                </infoGuiaRemision>
-
-                <destinatarios>
-                    <destinatario>
-                        <identificacionDestinatario t-esc="destinatario_id.vat"/>
-                        <razonSocialDestinatario t-esc="destinatario_id.name"/>
-                        <dirDestinatario t-esc="direccion_llegada"/>
-                        <motivoTraslado t-esc="motivo_traslado"/>
-                        <detalles>
-                            <detalle t-foreach="productos" t-as="producto">
-                                <codigoInterno t-esc="producto['default_code']"/>
-                                <descripcion t-esc="producto['name']"/>
-                                <cantidad t-esc="producto['cantidad']"/>
-                            </detalle>
-                        </detalles>
-                    </destinatario>
-                </destinatarios>
-            </guiaRemision>
         </template>
 
     </data>

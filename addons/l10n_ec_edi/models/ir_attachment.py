@@ -3,8 +3,7 @@
 
 from odoo import models, api
 from odoo.tools import xml_utils
-import logging
-_logger = logging.getLogger(__name__)
+
 
 L10N_EC_XSD_INFOS = {
     'xmldsig': {
@@ -30,7 +29,7 @@ L10N_EC_XSD_INFOS = {
     'withhold': {
         'name': 'ComprobanteRetencion_V2.0.0.xsd',
         'url': r'https://www.sri.gob.ec/o/sri-portlet-biblioteca-alfresco-internet/descargar/90950fca-73a7-4cfb-9c2d-3142b10435f2/XML%20y%20XSD%20Comprobante%20de%20Retenci%c3%b3n.zip',
-    },
+    }
 }
 
 
@@ -41,8 +40,7 @@ class IrAttachment(models.Model):
     def _l10n_ec_edi_load_xsd_attachments(self):
         """Downloads the xsd validation files if they don't already exist."""
         for xsd_info in L10N_EC_XSD_INFOS.values():
-            xml_utils.load_xsd_files_from_url(self.env, xsd_info['url'],
-                                              xsd_name_prefix='l10n_ec_edi')
+            xml_utils.load_xsd_files_from_url(self.env, xsd_info['url'], xsd_name_prefix='l10n_ec_edi')
 
     @api.model
     def action_download_xsd_files(self):
