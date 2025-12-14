@@ -69,6 +69,18 @@
                         </setting>
                     </block>
                 </xpath>
+                <xpath expr="//block[@id='account_digitalization']" position="before">
+                    <div id="stock_accounting">
+                        <block title="Contabilidad automática de existencias" id="stock_accounting_div">
+                            <setting string="Contabilidad automática de existencias"
+                                     help="Habilitar el uso de valoración automática de inventario"
+                                     title="Habilitar el uso de valoración automática de inventario"
+                                     name="stock_accounting_setting_container">
+                                <field name="group_stock_accounting_automatic"/>
+                            </setting>
+                        </block>
+                    </div>
+                </xpath>
             </field>
         </record>
 
