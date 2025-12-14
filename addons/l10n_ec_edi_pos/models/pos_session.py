@@ -34,3 +34,13 @@ class PosSession(models.Model):
             final_consumer = self.env.ref('l10n_ec.ec_final_consumer', raise_if_not_found=False)
             if final_consumer:
                 loaded_data['final_consumer_id'] = final_consumer.id
+
+    def _create_account_move(self, balancing_account, amount_to_balance, bank_payment_method_diffs):
+        """Override to add user information to the closing entry reference."""
+        move = super()._create_account_move(balancing_account, amount_to_balance, bank_payment_method_diffs)
+        if move:
+            # Add user information to the reference
+            user_name = self.user_id.name or self.env.user.name
+            current_ref = move.ref or ''
+            move.ref = f"{current_ref} - Usuario: {user_name}"
+        return move
