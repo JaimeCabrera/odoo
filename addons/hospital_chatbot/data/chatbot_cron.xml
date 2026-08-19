@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Session cleanup cron -->
+    <record id="ir_cron_chatbot_cleanup_sessions" model="ir.cron">
+        <field name="name">Chatbot: Limpiar sesiones expiradas</field>
+        <field name="model_id" ref="model_hospital_chatbot_session"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_cleanup_expired_sessions()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Daily token usage aggregation cron -->
+    <record id="ir_cron_chatbot_aggregate_token_usage" model="ir.cron">
+        <field name="name">Chatbot: Agregar uso diario de tokens IA</field>
+        <field name="model_id" ref="model_hospital_chatbot_ai_token_daily"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_aggregate_daily_usage()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Expire pending AI actions cron -->
+    <record id="ir_cron_chatbot_expire_pending_actions" model="ir.cron">
+        <field name="name">Chatbot: Expirar acciones pendientes IA</field>
+        <field name="model_id" ref="model_hospital_chatbot_ai_pending_action"/>
+        <field name="state">code</field>
+        <field name="code">env['hospital.chatbot.ai.pending.action'].search([('status', '=', 'pending'), ('expires_at', '&lt;', datetime.datetime.now())]).write({'status': 'expired'})</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Appointment reminder cron -->
+    <record id="ir_cron_chatbot_appointment_reminders" model="ir.cron">
+        <field name="name">Chatbot: Enviar recordatorios de citas</field>
+        <field name="model_id" ref="model_hospital_chatbot"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_appointment_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+    </record>
+</odoo>
